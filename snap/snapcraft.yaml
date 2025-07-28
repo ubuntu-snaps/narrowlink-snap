@@ -1,0 +1,43 @@
+name: narrowlink
+summary: narrowlink
+description: |
+  Narrowlink is a secure, open-source, and versatile platform for enabling secure remote access behind NATs and firewalls.
+version: "0.2.6"
+adopt-info: overlay
+
+base: core24
+grade: devel
+confinement: devmode
+
+platforms:
+  amd64:
+
+apps:
+  gateway:
+    command: bin/taos
+    plugs: [network]
+  agent:
+    command: bin/agent
+    plugs: [network]
+  client:
+    command: bin/client
+    plugs: [network]
+  token-generator:
+    command: bin/token-generator
+    plugs: [network]
+
+environment:
+  LD_LIBRARY_PATH: $SNAP/driver
+
+parts:
+  narrowlink:
+    plugin: rust
+    source: https://github.com/narrowlink/narrowlink.git
+    source-tag: 0.2.6
+
+  overlay:
+    plugin: dump
+    source: overlay
+    override-stage: |
+      craftctl default
+      craftctl set version="$(craftctl get version)+git$(git rev-parse --short HEAD)"
