@@ -13,16 +13,16 @@ platforms:
   amd64:
 
 apps:
-  narrowlink-client:
+  narrowlink:
     command: bin/narrowlink-client
     plugs: [network]
-  narrowlink-gateway:
+  gateway:
     command: bin/narrowlink-gateway
     plugs: [network]
-  narrowlink-agent:
+  agent:
     command: bin/narrowlink-agent
     plugs: [network]
-  narrowlink-token-generator:
+  token-generator:
     command: bin/narrowlink-token-generator
     plugs: [network]
 
