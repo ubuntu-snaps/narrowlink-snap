@@ -13,17 +13,17 @@ platforms:
   amd64:
 
 apps:
-  gateway:
-    command: bin/taos
+  narrowlink-gateway:
+    command: bin/narrowlink-gateway
     plugs: [network]
-  agent:
-    command: bin/agent
+  narrowlink-agent:
+    command: bin/narrowlink-agent
     plugs: [network]
-  client:
-    command: bin/client
+  narrowlink-client:
+    command: bin/narrowlink-client
     plugs: [network]
-  token-generator:
-    command: bin/token-generator
+  narrowlink-token-generator:
+    command: bin/narrowlink-token-generator
     plugs: [network]
 
 environment:
