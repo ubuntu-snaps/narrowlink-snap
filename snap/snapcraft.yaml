@@ -14,16 +14,16 @@ platforms:
 
 apps:
   narrowlink:
-    command: bin/narrowlink-client
+    command: narrowlink
     plugs: [network]
   gateway:
-    command: bin/narrowlink-gateway
+    command: narrowlink-gateway
     plugs: [network]
   agent:
-    command: bin/narrowlink-agent
+    command: narrowlink-agent
     plugs: [network]
   token-generator:
-    command: bin/narrowlink-token-generator
+    command: narrowlink-token-generator
     plugs: [network]
 
 parts:
