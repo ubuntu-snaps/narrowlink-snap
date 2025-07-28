@@ -13,8 +13,8 @@ platforms:
   amd64:
 
 apps:
-  narrowlink:
-    command: bin/narrowlink
+  narrowlink-client:
+    command: bin/narrowlink-client
     plugs: [network]
   narrowlink-gateway:
     command: bin/narrowlink-gateway
@@ -25,9 +25,6 @@ apps:
   narrowlink-token-generator:
     command: bin/narrowlink-token-generator
     plugs: [network]
-
-environment:
-  LD_LIBRARY_PATH: $SNAP/driver
 
 parts:
   narrowlink:
