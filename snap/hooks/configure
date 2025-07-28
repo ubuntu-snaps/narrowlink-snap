@@ -1,0 +1,40 @@
+#!/bin/sh -e
+
+if [ -z "$(snapctl get gateway.domain)" ]; then
+	snapctl set gateway.domain="gateway.iotapp.cloud";
+fi
+
+if [ -z "$(snapctl get gateway.wss.port)" ]; then
+	snapctl set gateway.wss.port="3443";
+fi
+
+if [ -z "$(snapctl get gateway.ws.port)" ]; then
+	snapctl set gateway.ws.port="3080";
+fi
+
+if [ -z "$(snapctl get gateway.acme.email)" ]; then
+	snapctl set gateway.acme.email="triobird@163.com";
+fi
+
+cat <<EOF
+name: narrowlink-gateway
+secret: [1, 2, 3, 4, 5, 6, 7, 8]
+services:
+- !Wss
+  domains: ["$(snapctl get gateway.domain)"]
+  listen_addr: "0.0.0.0:$(snapctl get gateway.wss.port)"
+  tls_config: !Acme
+    email: "$(snapctl get gateway.acme.email)"
+    challenge_type: Http01
+    directory_url: https://acme-v02.api.letsencrypt.org/directory
+- !Ws
+  domains: ["$(snapctl get gateway.domain)"]
+  listen_addr: "0.0.0.0:$(snapctl get gateway.ws.port)"
+EOF > $SNAP_DATA/gateway.yaml
+
+cat << EOF
+# TODO: add agent config
+EOF > $SNAP_DATA/agent.yaml
+
+snapctl restart "$SNAP_INSTANCE_NAME"
+

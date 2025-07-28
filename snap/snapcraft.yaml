@@ -13,14 +13,16 @@ platforms:
   amd64:
 
 apps:
-  narrowlink:
-    command: narrowlink
-    plugs: [network]
   gateway:
-    command: narrowlink-gateway
+    command: narrowlink-gateway -c $SNAP_DATA/gateway.yaml
+    daemon: simple
     plugs: [network]
   agent:
-    command: narrowlink-agent
+    command: narrowlink-agent -c $SNAP_DATA/agent.yaml
+    daemon: simple
+    plugs: [network]
+  narrowlink:
+    command: narrowlink
     plugs: [network]
   token-generator:
     command: narrowlink-token-generator
