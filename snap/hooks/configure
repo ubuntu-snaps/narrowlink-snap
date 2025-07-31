@@ -16,7 +16,7 @@ if [ -z "$(snapctl get gateway.acme.email)" ]; then
 	snapctl set gateway.acme.email="triobird@163.com";
 fi
 
-cat <<EOF
+cat > $SNAP_DATA/gateway.yaml <<EOF
 name: narrowlink-gateway
 secret: [1, 2, 3, 4, 5, 6, 7, 8]
 services:
@@ -30,11 +30,11 @@ services:
 - !Ws
   domains: ["$(snapctl get gateway.domain)"]
   listen_addr: "0.0.0.0:$(snapctl get gateway.ws.port)"
-EOF > $SNAP_DATA/gateway.yaml
+EOF
 
-cat << EOF
+cat > $SNAP_DATA/agent.yaml <<EOF
 # TODO: add agent config
-EOF > $SNAP_DATA/agent.yaml
+EOF
 
 snapctl restart "$SNAP_INSTANCE_NAME"
 
