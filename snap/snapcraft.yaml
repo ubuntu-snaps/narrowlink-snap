@@ -16,6 +16,7 @@ apps:
   gateway:
     command: narrowlink-gateway -c $SNAP_DATA/gateway.yaml
     daemon: simple
+    install-mode: disable
     plugs: [network]
   agent:
     command: narrowlink-agent -c $SNAP_DATA/agent.yaml
