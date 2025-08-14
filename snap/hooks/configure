@@ -5,11 +5,11 @@ if [ -z "$(snapctl get gateway.domain)" ]; then
 fi
 
 if [ -z "$(snapctl get gateway.wss.port)" ]; then
-	snapctl set gateway.wss.port="3443";
+	snapctl set gateway.wss.port="443";
 fi
 
 if [ -z "$(snapctl get gateway.ws.port)" ]; then
-	snapctl set gateway.ws.port="3080";
+	snapctl set gateway.ws.port="80";
 fi
 
 if [ -z "$(snapctl get gateway.acme.email)" ]; then
