@@ -82,7 +82,7 @@ endpoints:
     gateway: $(snapctl get gateway.domain):$(snapctl get gateway.wss.port)
     token: $(sed -n '2p' $SNAP_DATA/tokens)
     publish:
-      - $(sed -n '4p' $SNAP_DATA/tokens)
+      - $(sed -n '5p' $SNAP_DATA/tokens)
 EOF
 
 snapctl restart "$SNAP_INSTANCE_NAME"
