@@ -40,31 +40,33 @@ services:
   listen_addr: "0.0.0.0:$(snapctl get gateway.ws.port)"
 EOF
 
+MACHINE_ID=$(cat /etc/machine-id)
+
 cat > $SNAP_DATA/token-generator.yaml <<EOF
 secret: [1,2,3,4,5,6,7,8]
 tokens:
   - !Agent
     uid: $(snapctl get agent.uid)
-    name: $(hostname)
+    name: $MACHINE_ID
     exp: 2051193600 # 2035-01-01T00:00:00+08:00
   - !AgentPublish
-    uid: 00000000-0000-0000-0000-000000000000
-    name: iotbox-reel-01
+    uid: $(snapctl get agent.uid)
+    name: $MACHINE_ID
     exp: 2051193600 # 2035-01-01T00:00:00+08:00
     publish_hosts:
-      - host: $(hostname).$(snapctl get agent.publish.subdomain)
+      - host: $MACHINE_ID.$(snapctl get agent.publish.subdomain)
         port: 0
         connect:
           host: 127.0.0.1
           port: 80
           protocol: HTTP
-      - host: admin.$(hostname).$(snapctl get agent.publish.subdomain)
+      - host: admin.$MACHINE_ID.$(snapctl get agent.publish.subdomain)
         port: 0
         connect:
           host: 127.0.0.1
           port: 8100
           protocol: HTTP
-      - host: portainer.$(hostname).$(snapctl get agent.publish.subdomain)
+      - host: portainer.$MACHINE_ID.$(snapctl get agent.publish.subdomain)
         port: 0
         connect:
           host: 127.0.0.1
