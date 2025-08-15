@@ -64,6 +64,12 @@ tokens:
           host: 127.0.0.1
           port: 8100
           protocol: HTTP
+      - host: portainer.$(hostname).$(snapctl get agent.publish.subdomain)
+        port: 0
+        connect:
+          host: 127.0.0.1
+          port: 9443
+          protocol: TCP          
 EOF
 
 $SNAP/narrowlink-token-generator -c $SNAP_DATA/token-generator.yaml > $SNAP_DATA/tokens
