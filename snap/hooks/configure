@@ -32,19 +32,32 @@ if [ -z "$(snapctl get agent.publish.subdomain)" ]; then
 	snapctl set agent.publish.subdomain="iotbox.iotapp.cloud";
 fi
 
+WS_DOMAIN=$(snapctl get gateway.domain)
+WS_PORT=$(snapctl get gateway.ws.port)
+WSS_DOMAIN=$(snapctl get gateway.domain)
+WSS_PORT=$(snapctl get gateway.wss.port)
+
+if [ $WS_PORT -ne 80 ]; then
+	WS_DOMAIN="$WS_DOMAIN:$WS_PORT"
+fi
+
+if [ $WSS_PORT -ne 443 ]; then
+	WSS_DOMAIN="$WSS_DOMAIN:$WSS_PORT"
+fi
+
 cat > $SNAP_DATA/gateway.yaml <<EOF
 name: narrowlink-gateway
 secret: [$(snapctl get gateway.secret)]
 services:
 - !Ws
-  domains: ["$(snapctl get gateway.domain)"]
+  domains: ["$WS_DOMAIN"]
   listen_addr: "0.0.0.0:$(snapctl get gateway.ws.port)"
 EOF
 
 if [ "$(snapctl get gateway.wss.enabled)" = "true" ]; then
 cat >> $SNAP_DATA/gateway.yaml <<EOF
 - !Wss
-  domains: ["$(snapctl get gateway.domain)"]
+  domains: ["$WSS_DOMAIN"]
   listen_addr: "0.0.0.0:$(snapctl get gateway.wss.port)"
   tls_config: !Acme
     email: "$(snapctl get gateway.acme.email)"
@@ -54,6 +67,7 @@ EOF
 fi
 
 MACHINE_ID=$(cat /etc/machine-id)
+SUBDOMAIN=$(snapctl get agent.publish.subdomain)
 
 cat > $SNAP_DATA/token-generator.yaml <<EOF
 secret: [$(snapctl get gateway.secret)]
@@ -67,19 +81,19 @@ tokens:
     name: $MACHINE_ID
     exp: 2051193600 # 2035-01-01T00:00:00+08:00
     publish_hosts:
-      - host: $MACHINE_ID.$(snapctl get agent.publish.subdomain)
+      - host: $MACHINE_ID.$SUBDOMAIN
         port: 0
         connect:
           host: 127.0.0.1
           port: 80
           protocol: HTTP
-      - host: admin.$MACHINE_ID.$(snapctl get agent.publish.subdomain)
+      - host: admin.$MACHINE_ID.$SUBDOMAIN
         port: 0
         connect:
           host: 127.0.0.1
           port: 8100
           protocol: HTTP
-      - host: portainer.$MACHINE_ID.$(snapctl get agent.publish.subdomain)
+      - host: portainer.$MACHINE_ID.$SUBDOMAIN
         port: 0
         connect:
           host: 127.0.0.1
