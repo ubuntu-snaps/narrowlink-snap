@@ -4,12 +4,16 @@ if [ -z "$(snapctl get gateway.domain)" ]; then
 	snapctl set gateway.domain="gateway.iotapp.cloud";
 fi
 
-if [ -z "$(snapctl get gateway.wss.port)" ]; then
-	snapctl set gateway.wss.port="443";
-fi
-
 if [ -z "$(snapctl get gateway.ws.port)" ]; then
 	snapctl set gateway.ws.port="80";
+fi
+
+if [ -z "$(snapctl get gateway.wss.enabled)" ]; then
+	snapctl set gateway.wss.enabled="false";
+fi
+
+if [ -z "$(snapctl get gateway.wss.port)" ]; then
+	snapctl set gateway.wss.port="443";
 fi
 
 if [ -z "$(snapctl get gateway.acme.email)" ]; then
@@ -26,8 +30,15 @@ fi
 
 cat > $SNAP_DATA/gateway.yaml <<EOF
 name: narrowlink-gateway
-secret: [1, 2, 3, 4, 5, 6, 7, 8]
+secret: [105, 111, 116, 98, 111, 120]
 services:
+- !Ws
+  domains: ["$(snapctl get gateway.domain)"]
+  listen_addr: "0.0.0.0:$(snapctl get gateway.ws.port)"
+EOF
+
+if [ "$(snapctl get gateway.wss.enabled)" = "true" ]; then
+cat >> $SNAP_DATA/gateway.yaml <<EOF
 - !Wss
   domains: ["$(snapctl get gateway.domain)"]
   listen_addr: "0.0.0.0:$(snapctl get gateway.wss.port)"
@@ -35,15 +46,13 @@ services:
     email: "$(snapctl get gateway.acme.email)"
     challenge_type: Http01
     directory_url: https://acme-v02.api.letsencrypt.org/directory
-- !Ws
-  domains: ["$(snapctl get gateway.domain)"]
-  listen_addr: "0.0.0.0:$(snapctl get gateway.ws.port)"
 EOF
+fi
 
 MACHINE_ID=$(cat /etc/machine-id)
 
 cat > $SNAP_DATA/token-generator.yaml <<EOF
-secret: [1,2,3,4,5,6,7,8]
+secret: [105, 111, 116, 98, 111, 120]
 tokens:
   - !Agent
     uid: $(snapctl get agent.uid)
@@ -76,10 +85,19 @@ EOF
 
 $SNAP/narrowlink-token-generator -c $SNAP_DATA/token-generator.yaml > $SNAP_DATA/tokens
 
+PORT = $(snapctl get gateway.ws.port)
+PROTOCOL = "Ws"
+
+if [ "$(snapctl get gateway.wss.enabled)" = "true" ]; then
+	PORT = $(snapctl get gateway.wss.port)
+  PROTOCOL = "Wss"
+fi
+
 cat > $SNAP_DATA/agent.yaml <<EOF
 endpoints:
   - !SelfHosted 
-    gateway: $(snapctl get gateway.domain):$(snapctl get gateway.wss.port)
+    gateway: $(snapctl get gateway.domain):$PORT
+    protocol: $PROTOCOL
     token: $(sed -n '2p' $SNAP_DATA/tokens)
     publish:
       - $(sed -n '5p' $SNAP_DATA/tokens)
