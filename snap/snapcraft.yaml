@@ -11,6 +11,8 @@ confinement: strict
 
 platforms:
   amd64:
+  arm64:
+  armhf:
 
 apps:
   gateway:
