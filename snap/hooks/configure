@@ -85,12 +85,12 @@ EOF
 
 $SNAP/narrowlink-token-generator -c $SNAP_DATA/token-generator.yaml > $SNAP_DATA/tokens
 
-PORT = $(snapctl get gateway.ws.port)
-PROTOCOL = "Ws"
+PORT=$(snapctl get gateway.ws.port)
+PROTOCOL="Ws"
 
 if [ "$(snapctl get gateway.wss.enabled)" = "true" ]; then
-	PORT = $(snapctl get gateway.wss.port)
-  PROTOCOL = "Wss"
+	PORT=$(snapctl get gateway.wss.port)
+  PROTOCOL="Wss"
 fi
 
 cat > $SNAP_DATA/agent.yaml <<EOF
