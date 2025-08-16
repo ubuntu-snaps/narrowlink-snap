@@ -13,7 +13,7 @@ if [ -z "$(snapctl get gateway.ws.port)" ]; then
 fi
 
 if [ -z "$(snapctl get gateway.wss.enabled)" ]; then
-	snapctl set gateway.wss.enabled="false";
+	snapctl set gateway.wss.enabled="true";
 fi
 
 if [ -z "$(snapctl get gateway.wss.port)" ]; then
