@@ -17,14 +17,14 @@ apps:
     command: narrowlink-gateway -c $SNAP_DATA/gateway.yaml
     daemon: simple
     install-mode: disable
-    plugs: [network]
+    plugs: [network, network-bind]
   agent:
     command: narrowlink-agent -c $SNAP_DATA/agent.yaml
     daemon: simple
-    plugs: [network]
+    plugs: [network, network-bind]
   narrowlink:
     command: narrowlink
-    plugs: [network]
+    plugs: [network, network-bind]
   token-generator:
     command: narrowlink-token-generator
     plugs: [network]
