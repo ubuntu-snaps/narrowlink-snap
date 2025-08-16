@@ -6,8 +6,8 @@ version: "0.2.6"
 adopt-info: overlay
 
 base: core24
-grade: devel
-confinement: devmode
+grade: stable
+confinement: strict
 
 platforms:
   amd64:
