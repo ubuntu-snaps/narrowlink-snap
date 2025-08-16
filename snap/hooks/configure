@@ -1,5 +1,9 @@
 #!/bin/sh -e
 
+if [ -z "$(snapctl get gateway.secret)" ]; then
+	snapctl set gateway.secret="105,111,116,98,111,120,115,101,99,114,101,116";
+fi
+
 if [ -z "$(snapctl get gateway.domain)" ]; then
 	snapctl set gateway.domain="gateway.iotapp.cloud";
 fi
@@ -30,7 +34,7 @@ fi
 
 cat > $SNAP_DATA/gateway.yaml <<EOF
 name: narrowlink-gateway
-secret: [105, 111, 116, 98, 111, 120]
+secret: [$(snapctl get gateway.secret)]
 services:
 - !Ws
   domains: ["$(snapctl get gateway.domain)"]
@@ -52,7 +56,7 @@ fi
 MACHINE_ID=$(cat /etc/machine-id)
 
 cat > $SNAP_DATA/token-generator.yaml <<EOF
-secret: [105, 111, 116, 98, 111, 120]
+secret: [$(snapctl get gateway.secret)]
 tokens:
   - !Agent
     uid: $(snapctl get agent.uid)
