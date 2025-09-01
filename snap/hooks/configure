@@ -1,37 +1,5 @@
 #!/bin/sh -e
 
-if [ -z "$(snapctl get gateway.secret)" ]; then
-	snapctl set gateway.secret="105,111,116,98,111,120,115,101,99,114,101,116";
-fi
-
-if [ -z "$(snapctl get gateway.domain)" ]; then
-	snapctl set gateway.domain="gateway.iotapp.cloud";
-fi
-
-if [ -z "$(snapctl get gateway.ws.port)" ]; then
-	snapctl set gateway.ws.port="80";
-fi
-
-if [ -z "$(snapctl get gateway.wss.enabled)" ]; then
-	snapctl set gateway.wss.enabled="true";
-fi
-
-if [ -z "$(snapctl get gateway.wss.port)" ]; then
-	snapctl set gateway.wss.port="443";
-fi
-
-if [ -z "$(snapctl get gateway.acme.email)" ]; then
-	snapctl set gateway.acme.email="triobird@163.com";
-fi
-
-if [ -z "$(snapctl get agent.uid)" ]; then
-	snapctl set agent.uid="00000000-0000-0000-0000-000000000000";
-fi
-
-if [ -z "$(snapctl get agent.publish.subdomain)" ]; then
-	snapctl set agent.publish.subdomain="iotbox.iotapp.cloud";
-fi
-
 WS_DOMAIN=$(snapctl get gateway.domain)
 WS_PORT=$(snapctl get gateway.ws.port)
 WSS_DOMAIN=$(snapctl get gateway.domain)

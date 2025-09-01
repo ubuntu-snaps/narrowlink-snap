@@ -1,1 +1,10 @@
 #!/bin/sh -e
+
+snapctl set gateway.secret="105,111,116,98,111,120,115,101,99,114,101,116"
+snapctl set gateway.domain="iotbox.net"
+snapctl set gateway.ws.port="80"
+snapctl set gateway.wss.enabled="true"
+snapctl set gateway.wss.port="443"
+snapctl set gateway.acme.email="triobird@163.com"
+snapctl set agent.uid="00000000-0000-0000-0000-000000000000"
+snapctl set agent.publish.subdomain="iotbox.net"
